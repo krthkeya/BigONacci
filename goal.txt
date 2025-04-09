@@ -1,0 +1,7 @@
+To find the biggest possible fibonacci number.
+
+Rules : 
+- has to be in python.
+- Number has to be computed in less than or equal to one second.
+- Cython optimisations permitted hehe...if that is going to even help
+- Code will exectue on my laptop
