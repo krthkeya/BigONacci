@@ -1,7 +1,7 @@
 import timeit
 
 import sys
-sys.set_int_max_str_digits(1000000) 
+sys.set_int_max_str_digits(10000000) 
 
 bigonacci_result = {}
 
@@ -46,18 +46,29 @@ def matrix_exponentiation(n):
         if n % 2 == 1:
             ans = mul_matrices(ans, q)
         q = mul_matrices(q, q)
-        n//=2
+        n>>=1
     return ans[0][1]
 
 
-
-
-approaches = [matrix_exponentiation]
-max_n = 1000000000
+def fast_exponent_no_matrix(n):
+    def helper(n):
+        if n == 0:
+            return (0, 1)  
+        a, b = helper(n // 2)  
+        c = a * (2 * b - a)    
+        d = a * a + b * b       
+        if n % 2 == 0:
+            return (c, d)
+        else:
+            return (d, c + d)
+    return helper(n)[0]
+ 
+approaches = [fast_exponent_no_matrix]
+max_n = 20000000
 
 
 for fn in approaches:
-    for n in range(1850000, max_n, 10):
+    for n in range(5250000, max_n, 1000):
         s_t = timeit.default_timer()
         fib_found = fn(n)
         t = timeit.default_timer() - s_t
@@ -67,6 +78,5 @@ for fn in approaches:
             break
 
 import json
-
 with open("output.json", "w") as output_file:
     json.dump(bigonacci_result, output_file) 
