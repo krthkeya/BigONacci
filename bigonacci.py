@@ -1,7 +1,7 @@
 import timeit
 
 import sys
-sys.set_int_max_str_digits(10000000) 
+sys.set_int_max_str_digits(1000000000) 
 
 bigonacci_result = {}
 
@@ -49,28 +49,29 @@ def matrix_exponentiation(n):
         n>>=1
     return ans[0][1]
 
-
+from gmpy2 import mpz
 def fast_exponent_no_matrix(n):
     def helper(n):
         if n == 0:
-            return (0, 1)  
-        a, b = helper(n // 2)  
-        c = a * (2 * b - a)    
-        d = a * a + b * b       
+            return (mpz(0), mpz(1))
+        a, b = helper(n >> 1)
+        c = a * (b * 2 - a)
+        d = a * a + b * b
         if n % 2 == 0:
             return (c, d)
         else:
             return (d, c + d)
-    return helper(n)[0]
- 
+    return helper(mpz(n))[0]
+
+
 approaches = [fast_exponent_no_matrix]
-max_n = 20000000
+max_n = 200000000
 
 
 for fn in approaches:
-    for n in range(5250000, max_n, 1000):
+    for n in range(190100000, 200000000, 10000):
         s_t = timeit.default_timer()
-        fib_found = fn(n)
+        fib_found = int(fn(n))
         t = timeit.default_timer() - s_t
         bigonacci_result[fn.__name__] = {"n" : n, "f(n)" : fib_found, "T" : t}
         print(n, t)
